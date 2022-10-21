@@ -1,15 +1,13 @@
-pipeline {
-    agent any
-    stages {
-        stage('Performance Testing') {
-            steps {
-                echo 'Installing k6'
-                sh 'apt-get update'
-                sh 'chmod +x setup_k6.sh'
-                sh './setup_k6.sh'
-                echo 'Running K6 performance tests...'
-                sh 'k6 run loadtests/performance-test.js'
-            }
+podTemplate(containers: [
+        containerTemplate(name: 'k6', image: 'grafana/k6:master', command: 'sleep', args: '99d')
+    ]) {
+        node(POD_LABEL) {
+            container('k6'){
+                stage('test k6'){
+                
+				sh 'k6 version'
+				
+                }            
         }
     }
 }
