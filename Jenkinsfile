@@ -1,19 +1,14 @@
-podTemplate(containers: [
-    containerTemplate(name: 'k6', image: 'grafana/k6:latest', command: 'sleep', args: '99d')
-  ]) {
-
-    node(POD_LABEL) {
-        stage('k6') {
-            checkout scm
-            sh "ls"
-            container('k6') {
-                stage('test k6') {
-
-                  sh 'k6 version'
-
-                }
-
-    }
+pipeline {
+    agent any
+    stages {
+        stage('Performance Testing') {
+            steps {
+                echo 'Installing k6'
+                sh 'sudo chmod +x setup_k6.sh'
+                sh 'sudo ./setup_k6.sh'
+                echo 'Running K6 performance tests...'
+                sh 'k6 run loadtests/performance-test.js'
+            }
         }
     }
-  }
+}
