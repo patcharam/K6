@@ -9,7 +9,7 @@ podTemplate(containers: [
             container('k6') {
                 stage('test k6') {
 
-                  sh "k6"
+                  sh 'k6 version'
 
                 }
 
